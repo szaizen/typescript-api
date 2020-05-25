@@ -24,8 +24,8 @@ fs.removeSync(distRelativePath)
 mix
   .setPublicPath(distRelativePath)
   .polyfill()
-  .js(
-    `${srcRelativePath}/assets/js/app.js`,
+  .ts(
+    `${srcRelativePath}/assets/js/app.ts`,
     `${distRelativePath}/assets/js`
   )
   .eslint()
