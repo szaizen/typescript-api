@@ -1,0 +1,109 @@
+body {
+  background-color: whitesmoke;
+  opacity: 1;
+}
+
+.card {
+  width: 300px;
+  margin-bottom: 40px;
+  transition: all 0.5s ease;
+
+  &:hover {
+    transform: translate(0px, -4px);
+    box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.3),
+      0 0px 0 1px rgba(10, 10, 10, 0.05);
+  }
+
+  &__list {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    &:before {
+      content: "";
+      display: block;
+      width: 300px;
+      height: 0;
+      order: 1;
+    }
+    &:after {
+      content: "";
+      display: block;
+      width: 300px;
+      height: 0;
+    }
+  }
+}
+
+.article {
+  &__category {
+    display: flex;
+    flex-wrap: wrap;
+    li {
+      list-style: none;
+      font-size: 12px;
+      &:before {
+        content: "#";
+      }
+    }
+  }
+  &__date {
+    font-size: 13px;
+    letter-spacing: 0.7px;
+  }
+}
+
+.menu-list {
+  & li {
+    font-size: 14px;
+    margin-bottom: 3px;
+    cursor: pointer;
+    &:hover {
+      opacity: 0.6;
+    }
+  }
+}
+
+/* Bulma 上書き対応 */
+.card ul.article__category {
+  margin: 0;
+  margin-bottom: 0;
+}
+.card .article__category li {
+  margin: 0 5px 0 0;
+}
+
+#js-template {
+  display: none;
+}
+
+.main {
+  padding-top: 20px;
+  display: flex;
+  &__sidebar {
+    max-width: 300px;
+  }
+  &__content {
+    max-width: 1000px;
+  }
+}
+
+/* Bulma style */
+.pagination {
+  margin: 20px 0 50px;
+  &-list {
+    justify-content: center;
+  }
+  &-link {
+    background-color: #fff;
+  }
+}
+
+.loading {
+  pointer-events: none;
+  .main {
+    opacity: 0.5;
+  }
+  .loading__image {
+    display: block;
+  }
+}
