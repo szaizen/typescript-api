@@ -1,14 +1,19 @@
-import formatData from "./modules/format-data.js";
-import createDom from "./modules/create-dom.js";
-import requestApi from "./modules/request-api.js";
-import getApiUrl from "./modules/get-api-url.js";
-import Pagination from "./class/pagination.js";
+import formatData from "./modules/format-data";
+import createDom from "./modules/create-dom";
+import requestApi from "./modules/request-api";
+import getApiUrl from "./modules/get-api-url";
+import Pagination from "./class/pagination";
 
-const $add = document.getElementById("js-add");
-const $pagination = document.getElementById("js-pagination");
-const $search = document.getElementById("js-search-btn");
+const $add: HTMLInputElement = document.getElementById("js-add") as HTMLInputElement;
+const $pagination: HTMLInputElement = document.getElementById("js-pagination") as HTMLInputElement;
+const $search: HTMLInputElement = document.getElementById("js-search-btn") as HTMLInputElement;
 
-let categoryList = [];
+// interface category {
+//   id: number,
+//   name: string,
+//   url: string
+// }
+let categoryList:{id: number, name: string, url: string}[] = [];
 
 let currentData = {
   type: "post", // post or category or search
@@ -19,8 +24,7 @@ let currentData = {
 
 // API URL
 const API_URL = "https://liginc.co.jp/wp-json/wp/v2/posts?_embed&per_page=9";
-const CATEGORY_URL =
-  "https://liginc.co.jp/wp-json/wp/v2/categories?per_page=100";
+const CATEGORY_URL = "https://liginc.co.jp/wp-json/wp/v2/categories?per_page=100";
 
 // カテゴリー取得、サイドバー更新
 addCategory();
@@ -36,13 +40,14 @@ addCard();
 $search.addEventListener("click", () => {
   currentData.type = "search";
   currentData.page = 1;
-  currentData.searchText = document.getElementById("js-search-text").value;
+  const $searchText: HTMLInputElement = document.getElementById("js-search-text") as HTMLInputElement;
+  currentData.searchText = $searchText.value;
   addCard();
 });
 
 // ページネーション
 $pagination.addEventListener("click", e => {
-  let clickPage = Number(e.target.dataset.pagenumber);
+  let clickPage: number = Number((e.target as HTMLInputElement).dataset.pagenumber);
   currentData.page = clickPage;
   addCard();
 });
@@ -53,7 +58,8 @@ $pagination.addEventListener("click", e => {
 
 // カテゴリー追加
 async function addCategory() {
-  let result = await requestApi(CATEGORY_URL);
+  let result: any = await requestApi(CATEGORY_URL);
+  console.log(result);
   categoryList = result.response.map(el => {
     return { id: el.id, name: el.name, url: el.link };
   });
@@ -62,12 +68,14 @@ async function addCategory() {
 
 // サイドバーにカテゴリー一覧表示
 function addSidebarCategoryList() {
-  let $ul = document.getElementById("js-category-list");
+  let $ul: HTMLInputElement = document.getElementById("js-category-list") as HTMLInputElement;
+
+  console.log(categoryList);
   $ul.innerHTML = categoryList
-    .map(item => `<li data-categoryid="${item.id}">${item.name}</li>`)
+    .map((item) => `<li data-categoryid="${item.id}">${item.name}</li>`)
     .join("");
   $ul.addEventListener("click", e => {
-    currentData.cateogyrId = e.target.dataset.categoryid;
+    currentData.cateogyrId = (e.target as HTMLInputElement).dataset.categoryid as string;
     currentData.page = 1;
     currentData.type = "category";
     addCard();
@@ -77,7 +85,7 @@ function addSidebarCategoryList() {
 // 記事追加
 async function addCard() {
   let url = API_URL + encodeURI(getApiUrl(currentData)); // アクセスするAPIURLを生成
-  let result = await requestApi(url); // データ取得
+  let result: any = await requestApi(url); // データ取得
   let response = result.response; // データ内からresponseを取り出す
   let articleTotal = result.getResponseHeader("x-wp-total"); // データ内から総記事数を取り出す
 
@@ -93,7 +101,8 @@ async function addCard() {
   }
 
   // 記事総件数 追加
-  document.getElementById("js-article-total").innerText = articleTotal;
+  const $totalNumber: HTMLInputElement = document.getElementById("js-article-total") as HTMLInputElement;
+  $totalNumber.innerText = articleTotal;
   // ページネーション更新
   new Pagination(
     currentData.page,
